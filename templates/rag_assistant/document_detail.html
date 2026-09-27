@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ document.title }} | Linuxademy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-black text-white">
+    <main class="mx-auto max-w-3xl px-6 py-12">
+        <a href="{% url 'home' %}"
+           class="text-sm font-bold uppercase tracking-widest text-[#FF4D00]">
+            Linuxademy
+        </a>
+
+        <article class="mt-12">
+            <h1 class="text-4xl font-bold">{{ document.title }}</h1>
+
+            <div class="mt-8 whitespace-pre-wrap text-lg leading-relaxed text-white/80">{{ document.content }}</div>
+        </article>
+
+        <form method="post"
+              action="{% url 'delete_document' document.id %}"
+              class="mt-12 border-t border-white/20 pt-8">
+            {% csrf_token %}
+
+            <button type="submit"
+                    class="rounded border border-red-500 px-5 py-3 text-red-400 hover:bg-red-500/10">
+                Delete Knowledge
+            </button>
+        </form>
+    </main>
+</body>
+</html>

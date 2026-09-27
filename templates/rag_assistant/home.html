@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI RAG Assistant | Linuxademy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-black text-white">
+    <main class="mx-auto max-w-4xl px-6 py-12">
+        <header class="border-b border-white/20 pb-6">
+            <a href="{% url 'home' %}"
+               class="text-sm font-bold uppercase tracking-widest text-[#FF4D00]">
+                Linuxademy
+            </a>
+        </header>
+
+        <section class="py-14">
+            <h1 class="text-5xl font-bold tracking-tight">
+                AI RAG Assistant
+            </h1>
+
+            <p class="mt-5 text-lg text-white/70">
+                Ask questions using your own knowledge base.
+            </p>
+
+            <a href="{% url 'add_document' %}"
+               class="mt-8 inline-block rounded bg-[#FF4D00] px-5 py-3 font-semibold text-white hover:bg-orange-600">
+                Add Knowledge
+            </a>
+        </section>
+
+        <section class="border-t border-white/20 py-10">
+            <h2 class="text-2xl font-bold">Ask your knowledge base</h2>
+
+            <form method="post" class="mt-6 flex flex-col gap-3 sm:flex-row">
+                {% csrf_token %}
+
+                <input
+                    type="text"
+                    name="question"
+                    value="{{ question }}"
+                    placeholder="What does x mean in Linux permissions?"
+                    required
+                    class="min-w-0 flex-1 rounded border border-white/30 bg-zinc-900 p-3 text-white focus:border-[#FF4D00] focus:outline-none"
+                >
+
+                <button
+                    type="submit"
+                    class="rounded bg-[#FF4D00] px-6 py-3 font-semibold hover:bg-orange-600"
+                >
+                    Ask
+                </button>
+            </form>
+
+            {% if answer %}
+                <div class="mt-8 rounded border border-white/20 bg-zinc-900 p-6">
+                    <h3 class="text-xl font-bold text-[#FF4D00]">Answer</h3>
+
+                    <p class="mt-4 whitespace-pre-wrap text-white/80">{{ answer }}</p>
+
+                    {% if sources %}
+                        <h4 class="mt-8 font-semibold">Sources</h4>
+
+                        <ul class="mt-2 list-inside list-disc text-white/70">
+                            {% for source in sources %}
+                                <li>{{ source }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="border-t border-white/20 py-10">
+            <h2 class="text-2xl font-bold">Knowledge Base</h2>
+
+            {% if documents %}
+                <div class="mt-6 space-y-4">
+                    {% for document in documents %}
+                        <a href="{% url 'document_detail' document.id %}"
+                           class="block rounded border border-white/20 p-5 hover:border-[#FF4D00]">
+                            <h3 class="text-lg font-semibold">
+                                {{ document.title }}
+                            </h3>
+
+                            <p class="mt-2 text-sm text-white/60">
+                                {{ document.content|truncatewords:25 }}
+                            </p>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="mt-6 text-white/60">
+                    No knowledge added yet.
+                </p>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

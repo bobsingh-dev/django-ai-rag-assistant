@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Knowledge | Linuxademy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-black text-white">
+    <main class="mx-auto max-w-3xl px-6 py-12">
+        <a href="{% url 'home' %}"
+           class="text-sm font-bold uppercase tracking-widest text-[#FF4D00]">
+            Linuxademy
+        </a>
+
+        <h1 class="mt-12 text-4xl font-bold">Add Knowledge</h1>
+
+        <form method="post" class="mt-8 space-y-6">
+            {% csrf_token %}
+
+            <div>
+                <label for="{{ form.title.id_for_label }}"
+                       class="mb-2 block font-semibold">
+                    Title
+                </label>
+
+                <input
+                    type="text"
+                    name="title"
+                    id="{{ form.title.id_for_label }}"
+                    value="{{ form.title.value|default_if_none:'' }}"
+                    maxlength="200"
+                    required
+                    class="w-full rounded border border-white/30 bg-zinc-900 p-3 text-white focus:border-[#FF4D00] focus:outline-none"
+                >
+
+                {{ form.title.errors }}
+            </div>
+
+            <div>
+                <label for="{{ form.content.id_for_label }}"
+                       class="mb-2 block font-semibold">
+                    Content
+                </label>
+
+                <textarea
+                    name="content"
+                    id="{{ form.content.id_for_label }}"
+                    rows="12"
+                    required
+                    class="w-full rounded border border-white/30 bg-zinc-900 p-3 text-white focus:border-[#FF4D00] focus:outline-none"
+                >{{ form.content.value|default_if_none:'' }}</textarea>
+
+                {{ form.content.errors }}
+            </div>
+
+            <button type="submit"
+                    class="rounded bg-[#FF4D00] px-5 py-3 font-semibold hover:bg-orange-600">
+                Save Knowledge
+            </button>
+        </form>
+    </main>
+</body>
+</html>

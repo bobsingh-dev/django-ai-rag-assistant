@@ -1,0 +1,56 @@
+service: ai_rag_assistant
+
+image: ai_rag_assistant
+
+servers:
+  web:
+    - 165.245.230.188
+
+proxy:
+  ssl: true
+  host: ai.linuxademy.com
+  app_port: 8000
+  forward_headers: true
+  response_timeout: 120
+
+  healthcheck:
+    path: /health/
+    interval: 3
+    timeout: 3
+
+registry:
+  server: localhost:5555
+
+builder:
+  arch: amd64
+
+env:
+  clear:
+    DJANGO_DEBUG: "False"
+    ALLOWED_HOSTS: "ai.linuxademy.com,localhost,127.0.0.1"
+
+    POSTGRES_DB: ai_rag_assistant_production
+    POSTGRES_USER: ai_rag_assistant
+    POSTGRES_HOST: ai_rag_assistant-db
+    POSTGRES_PORT: "5432"
+
+  secret:
+    - DJANGO_SECRET_KEY
+    - POSTGRES_PASSWORD
+    - OPENAI_API_KEY
+
+accessories:
+  db:
+    image: postgres:17
+    host: 165.245.230.188
+
+    env:
+      clear:
+        POSTGRES_DB: ai_rag_assistant_production
+        POSTGRES_USER: ai_rag_assistant
+
+      secret:
+        - POSTGRES_PASSWORD
+
+    volumes:
+      - ai_rag_assistant-data:/var/lib/postgresql/data
